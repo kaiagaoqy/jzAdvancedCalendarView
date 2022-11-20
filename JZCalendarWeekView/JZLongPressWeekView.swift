@@ -10,6 +10,8 @@ import UIKit
 import SwiftUI
 
 public protocol JZLongPressViewDelegate: class {
+    
+    
 
     /// When addNew long press gesture ends, this function will be called.
     /// You should handle what should be done after creating a new event.
@@ -75,7 +77,9 @@ extension JZLongPressViewDataSource {
 }
 
 open class JZLongPressWeekView: JZBaseWeekView {
-
+    var tappedEvent:JZBaseEvent?
+    var currentDetailPage: UIView?
+    
     public enum LongPressType {
         /// when long press position is not on a existed event, this type will create a new event view allowing user to move
         case addNew
@@ -369,7 +373,8 @@ open class JZLongPressWeekView: JZBaseWeekView {
 
 // Long press Gesture methods
 extension JZLongPressWeekView: UIGestureRecognizerDelegate {
-
+    
+    
     // Override this function to customise gesture begin conditions
     override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let pointInSelfView = gestureRecognizer.location(in: self)
@@ -425,8 +430,8 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
     
     public func initiateDetailView(selectedCell: UICollectionViewCell?) -> UIView {
         
-        let detailView = UIView(frame: CGRect(x: 10, y: 100, width: 300, height: 200))
-
+        let detailView = UIView(frame: CGRect(x: 10, y: 100, width: 300, height: 500))
+        currentDetailPage = detailView
         // setup UIView background colour
         detailView.backgroundColor = .white
 
@@ -439,10 +444,10 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
         // Change UIView Border Color to Red
         detailView.layer.borderColor = UIColor.lightGray.cgColor
 
-        let delBtn = UIButton(type: .system)
-        let completeBtn = UIButton(type: .system)
+        var delBtn = UIButton(type: .system)
+        var completeBtn = UIButton(type: .system)
         var completeAlert:String = "Mark as Completed"
-        let titleLabel:UILabel = UILabel()
+        var titleLabel:UILabel = UILabel()
         if #available(iOS 11.0, *) {
             titleLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle)
         } else {
@@ -451,32 +456,36 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
         }
         let completeLabel:UILabel = UILabel()
         completeLabel.text = "Completed"
-
-
+        
         if let event = (selectedCell as? JZLongPressEventCell)?.event{
             if (!event.completed){
                 completeAlert = "Mark as UN-Completed"
                 completeLabel.text = "unComplete"
                 completeBtn.tintColor = .red
             }
+            tappedEvent = event
             titleLabel.text = event.title
+            completeBtn.setTitle(completeAlert, for: .normal) // display before tapping
+            // Add UIView as a Subview
+            
         }
-        completeBtn.setTitle(completeAlert, for: .normal) // display before tapping
-        // Add UIView as a Subview
-
+        completeBtn.addTarget(self, action:#selector(self.completeBtnClicked), for: .touchUpInside)
+        
         detailView.addSubviews([titleLabel,delBtn,completeLabel])
         
-//        if let event = (selectedCell as? JZLongPressEventCell)?.event{
-//            if #available(iOS 13.0, *) {
-//                var detailView = EventDetailView(event: event)
-//            } else {
-//                // Fallback on earlier versions
-//                print("earlier")
-//            }
-//
-//        }
-        
+
         return detailView
+    }
+    
+
+    
+    @objc func completeBtnClicked(){
+        tappedEvent!.completed = !tappedEvent!.completed
+        tappedEvent = nil
+        currentDetailPage?.removeFromSuperview()
+        currentDetailPage = nil
+        print("complete")
+        
     }
 
     /// The basic longPressView position logic is moving with your finger's original position.
