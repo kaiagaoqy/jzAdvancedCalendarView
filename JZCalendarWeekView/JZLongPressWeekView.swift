@@ -155,9 +155,9 @@ open class JZLongPressWeekView: JZBaseWeekView {
         longPressGesture.delegate = self
         collectionView.addGestureRecognizer(longPressGesture)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTapGeature(_:)))
-        tapGesture.delegate = self
-        collectionView.addGestureRecognizer(tapGesture)
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTapGeature(_:)))
+//        tapGesture.delegate = self
+//        collectionView.addGestureRecognizer(tapGesture)
     }
 
     /// Updating time label in longPressView during dragging
