@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 public protocol JZLongPressViewDelegate: class {
 
@@ -403,14 +404,80 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
 
         let state = gestureRecognizer.state
         var currentMovingCell: UICollectionViewCell!
+        var StartDate = getLongPressViewStartDate(pointInCollectionView: pointInCollectionView, pointInSelfView: pointInSelfView)
         
-        if state == .began{
-            print("begin")
-        }
-        else if state == .ended{
+        if state == .ended{
+            // Called when finish one tap
             print("ended")
+            if let indexPath = collectionView.indexPathForItem(at: pointInCollectionView) {
+                // Can add some conditions for allowing only few types of cells can be moved
+                currentMovingCell = collectionView.cellForItem(at: indexPath)
+                initiateDetailView(selectedCell: currentMovingCell)
+                longPressDelegate?.weekView(self, didEndAddNewLongPressAt: StartDate)
+//                self.addSubview(detailView)
+                
+            } else {
+                print("NO event is selected")
+            }
+            
         }
         
+    }
+    
+    public func initiateDetailView(selectedCell: UICollectionViewCell?) {
+        
+//        let detailView = UIView(frame: CGRect(x: 10, y: 100, width: 300, height: 200))
+//
+//        // setup UIView background colour
+//        detailView.backgroundColor = .white
+//
+//        // Add rounded corners to UIView
+//        detailView.layer.cornerRadius=25
+//
+//        // Add border to UIView
+//        detailView.layer.borderWidth=2
+//
+//        // Change UIView Border Color to Red
+//        detailView.layer.borderColor = UIColor.lightGray.cgColor
+//
+//        let delBtn = UIButton(type: .system)
+//        let completeBtn = UIButton(type: .system)
+//        var completeAlert:String = "Mark as Completed"
+//        let titleLabel:UILabel = UILabel()
+//        if #available(iOS 11.0, *) {
+//            titleLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+//        } else {
+//            // Fallback on earlier versions
+//            titleLabel.font = UIFont.preferredFont(forTextStyle: .title1)
+//        }
+//        let completeLabel:UILabel = UILabel()
+//        completeLabel.text = "Completed"
+//
+//
+//        if let event = (selectedCell as? JZLongPressEventCell)?.event{
+//            if (!event.completed){
+//                completeAlert = "Mark as UN-Completed"
+//                completeLabel.text = "unComplete"
+//                completeBtn.tintColor = .red
+//            }
+//            titleLabel.text = event.title
+//        }
+//        completeBtn.setTitle(completeAlert, for: .normal) // display before tapping
+//        // Add UIView as a Subview
+//
+//        detailView.addSubviews([titleLabel,delBtn,completeLabel])
+        
+        if let event = (selectedCell as? JZLongPressEventCell)?.event{
+            if #available(iOS 13.0, *) {
+                var detailView = EventDetailView(event: event)
+            } else {
+                // Fallback on earlier versions
+                print("earlier")
+            }
+
+        }
+        
+//        return detailView
     }
 
     /// The basic longPressView position logic is moving with your finger's original position.
