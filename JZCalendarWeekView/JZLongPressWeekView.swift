@@ -404,7 +404,7 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
 
         let state = gestureRecognizer.state
         var currentMovingCell: UICollectionViewCell!
-        var StartDate = getLongPressViewStartDate(pointInCollectionView: pointInCollectionView, pointInSelfView: pointInSelfView)
+//        var StartDate = getLongPressViewStartDate(pointInCollectionView: pointInCollectionView, pointInSelfView: pointInSelfView)
         
         if state == .ended{
             // Called when finish one tap
@@ -413,9 +413,10 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
                 // Can add some conditions for allowing only few types of cells can be moved
                 currentMovingCell = collectionView.cellForItem(at: indexPath)
                 initiateDetailView(selectedCell: currentMovingCell)
-                longPressDelegate?.weekView(self, didEndAddNewLongPressAt: StartDate)
-//                self.addSubview(detailView)
-                
+                if let event = (currentMovingCell as? JZLongPressEventCell)?.event{
+                    longPressDelegate?.weekView(self, didEndAddNewLongPressAt: event.startDate)
+                    //                self.addSubview(detailView)
+                }
             } else {
                 print("NO event is selected")
             }
