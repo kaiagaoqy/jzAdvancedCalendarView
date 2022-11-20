@@ -448,7 +448,7 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
         var completeBtn = UIButton(type: .system)
         var completeAlert:String = "Mark as Completed"
         var titleLabel:UILabel = UILabel()
-        titleLabel.frame = CGRect.init(x: 0.0, y:0.0, width:200.0, height:50.0)
+        titleLabel.frame = CGRect.init(x: 10.0, y:0.0, width:200.0, height:50.0)
         if #available(iOS 11.0, *) {
             titleLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle)
         } else {
@@ -457,7 +457,7 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
         }
         let completeLabel:UILabel = UILabel()
         completeLabel.text = "Completed"
-        completeBtn.frame = CGRect.init(x: 0.0, y:0.0, width:200.0, height:50.0)
+        completeBtn.frame = CGRect.init(x: 10.0, y:100.0, width:200.0, height:50.0)
         
         if let event = (selectedCell as? JZLongPressEventCell)?.event{
             if (!event.completed){
