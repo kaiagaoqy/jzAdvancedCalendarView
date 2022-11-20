@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import SwiftUI
 
 public protocol JZLongPressViewDelegate: class {
+    
+    
 
     /// When addNew long press gesture ends, this function will be called.
     /// You should handle what should be done after creating a new event.
@@ -57,6 +60,8 @@ extension JZLongPressViewDelegate {
     public func weekView(_ weekView: JZLongPressWeekView, longPressType: JZLongPressWeekView.LongPressType, didCancelLongPressAt startDate: Date) {}
     public func weekView(_ weekView: JZLongPressWeekView, didEndAddNewLongPressAt startDate: Date) {}
     public func weekView(_ weekView: JZLongPressWeekView, editingEvent: JZBaseEvent, didEndMoveLongPressAt startDate: Date) {}
+    
+    
 }
 
 extension JZLongPressViewDataSource {
@@ -72,7 +77,9 @@ extension JZLongPressViewDataSource {
 }
 
 open class JZLongPressWeekView: JZBaseWeekView {
-
+    var tappedEvent:JZBaseEvent?
+    var currentDetailPage: UIView?
+    
     public enum LongPressType {
         /// when long press position is not on a existed event, this type will create a new event view allowing user to move
         case addNew
@@ -147,6 +154,10 @@ open class JZLongPressWeekView: JZBaseWeekView {
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongPressGesture(_:)))
         longPressGesture.delegate = self
         collectionView.addGestureRecognizer(longPressGesture)
+        
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTapGeature(_:)))
+//        tapGesture.delegate = self
+//        collectionView.addGestureRecognizer(tapGesture)
     }
 
     /// Updating time label in longPressView during dragging
@@ -362,7 +373,8 @@ open class JZLongPressWeekView: JZBaseWeekView {
 
 // Long press Gesture methods
 extension JZLongPressWeekView: UIGestureRecognizerDelegate {
-
+    
+    
     // Override this function to customise gesture begin conditions
     override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let pointInSelfView = gestureRecognizer.location(in: self)
@@ -389,6 +401,94 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
 
         return true
     }
+    
+    @objc private func handleTapGeature(_ gestureRecognizer:UITapGestureRecognizer){
+        let pointInSelfView = gestureRecognizer.location(in: self)
+        /// Used for get startDate of longPressView
+        let pointInCollectionView = gestureRecognizer.location(in: collectionView)
+
+        let state = gestureRecognizer.state
+        var currentMovingCell: UICollectionViewCell!
+//        var StartDate = getLongPressViewStartDate(pointInCollectionView: pointInCollectionView, pointInSelfView: pointInSelfView)
+        
+        if state == .ended{
+            // Called when finish one tap
+            print("ended")
+            if let indexPath = collectionView.indexPathForItem(at: pointInCollectionView) {
+                // Can add some conditions for allowing only few types of cells can be moved
+                currentMovingCell = collectionView.cellForItem(at: indexPath)
+                let detailView = initiateDetailView(selectedCell: currentMovingCell)
+                self.addSubview(detailView)
+                
+            } else {
+                print("NO event is selected")
+            }
+            
+        }
+        
+    }
+    
+    public func initiateDetailView(selectedCell: UICollectionViewCell?) -> UIView {
+        
+        let detailView = UIView(frame: CGRect(x: 10, y: 100, width: 300, height: 500))
+        currentDetailPage = detailView
+        // setup UIView background colour
+        detailView.backgroundColor = .white
+
+        // Add rounded corners to UIView
+        detailView.layer.cornerRadius=25
+
+        // Add border to UIView
+        detailView.layer.borderWidth=2
+
+        // Change UIView Border Color to Red
+        detailView.layer.borderColor = UIColor.lightGray.cgColor
+
+        var delBtn = UIButton(type: .system)
+        var completeBtn = UIButton(type: .system)
+        var completeAlert:String = "Mark as Completed"
+        var titleLabel:UILabel = UILabel()
+        titleLabel.frame = CGRect.init(x: 10.0, y:0.0, width:200.0, height:50.0)
+        if #available(iOS 11.0, *) {
+            titleLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+        } else {
+            // Fallback on earlier versions
+            titleLabel.font = UIFont.preferredFont(forTextStyle: .title1)
+        }
+        let completeLabel:UILabel = UILabel()
+        completeLabel.text = "Completed"
+        completeBtn.frame = CGRect.init(x: 10.0, y:100.0, width:200.0, height:50.0)
+        
+        if let event = (selectedCell as? JZLongPressEventCell)?.event{
+            if (!event.completed){
+                completeAlert = "Mark as UN-Completed"
+                completeLabel.text = "unComplete"
+                completeBtn.tintColor = .red
+            }
+            tappedEvent = event
+            titleLabel.text = event.title
+            completeBtn.setTitle(completeAlert, for: .normal) // display before tapping
+            // Add UIView as a Subview
+            
+        }
+        completeBtn.addTarget(self, action:#selector(self.completeBtnClicked), for: .touchUpInside)
+        
+        detailView.addSubviews([titleLabel,delBtn,completeLabel])
+        
+
+        return detailView
+    }
+    
+
+    
+    @objc func completeBtnClicked(){
+        tappedEvent!.completed = !tappedEvent!.completed
+        tappedEvent = nil
+        currentDetailPage?.removeFromSuperview()
+        currentDetailPage = nil
+        print("complete")
+        
+    }
 
     /// The basic longPressView position logic is moving with your finger's original position.
     /// - The Move type longPressView will keep the relative position during this longPress, that's how Apple Calendar did.
@@ -401,7 +501,8 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
 
         let state = gestureRecognizer.state
         var currentMovingCell: UICollectionViewCell!
-
+        
+        
         if isLongPressing == false {
             if let indexPath = collectionView.indexPathForItem(at: pointInCollectionView) {
                 // Can add some conditions for allowing only few types of cells can be moved

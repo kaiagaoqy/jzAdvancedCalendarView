@@ -36,6 +36,7 @@
 		8EF7EBCD20A55C8E00D5CEEA /* JZAllDayCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7EBCC20A55C8E00D5CEEA /* JZAllDayCorner.swift */; };
 		8EF7EBCF20A55CF900D5CEEA /* JZAllDayHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7EBCE20A55CF900D5CEEA /* JZAllDayHeader.swift */; };
 		8EF7EBD120A55D1000D5CEEA /* JZAllDayHeaderBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7EBD020A55D1000D5CEEA /* JZAllDayHeaderBackground.swift */; };
+		C988570A2929E6F300427B64 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98857092929E6F300427B64 /* EventDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		8EF7EBCC20A55C8E00D5CEEA /* JZAllDayCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JZAllDayCorner.swift; sourceTree = "<group>"; };
 		8EF7EBCE20A55CF900D5CEEA /* JZAllDayHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JZAllDayHeader.swift; sourceTree = "<group>"; };
 		8EF7EBD020A55D1000D5CEEA /* JZAllDayHeaderBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JZAllDayHeaderBackground.swift; sourceTree = "<group>"; };
+		C98857092929E6F300427B64 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 				8E99A0A12134E84800415071 /* JZCollectionView.swift */,
 				8E1BA956206B47DA007BE13C /* JZBaseWeekView.swift */,
 				8E21E8AF20916A96002D72D0 /* JZLongPressWeekView.swift */,
+				C98857092929E6F300427B64 /* EventDetailView.swift */,
 				8E1BA971206B61B7007BE13C /* JZLongPressEventCell.swift */,
 				8E023C83206C732300C523BE /* JZBaseEvent.swift */,
 				8E40B2DF20B65C4600FFEB68 /* JZAllDayEvent.swift */,
@@ -344,6 +347,7 @@
 				8E1BA966206B4F0B007BE13C /* JZGridLine.swift in Sources */,
 				8E1BA957206B47DA007BE13C /* JZBaseWeekView.swift in Sources */,
 				8E21E8B020916A96002D72D0 /* JZLongPressWeekView.swift in Sources */,
+				C988570A2929E6F300427B64 /* EventDetailView.swift in Sources */,
 				8EF7EBD120A55D1000D5CEEA /* JZAllDayHeaderBackground.swift in Sources */,
 				8E023C86206C956F00C523BE /* JZWeekViewColors.swift in Sources */,
 				8E1BA96A206B5350007BE13C /* JZWeekViewHelper.swift in Sources */,
