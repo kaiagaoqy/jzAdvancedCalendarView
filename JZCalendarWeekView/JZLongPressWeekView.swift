@@ -57,6 +57,8 @@ extension JZLongPressViewDelegate {
     public func weekView(_ weekView: JZLongPressWeekView, longPressType: JZLongPressWeekView.LongPressType, didCancelLongPressAt startDate: Date) {}
     public func weekView(_ weekView: JZLongPressWeekView, didEndAddNewLongPressAt startDate: Date) {}
     public func weekView(_ weekView: JZLongPressWeekView, editingEvent: JZBaseEvent, didEndMoveLongPressAt startDate: Date) {}
+    
+    
 }
 
 extension JZLongPressViewDataSource {
@@ -389,6 +391,23 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
 
         return true
     }
+    
+    @objc private func handleTapGeature(_ gestureRecognizer:UITapGestureRecognizer){
+        let pointInSelfView = gestureRecognizer.location(in: self)
+        /// Used for get startDate of longPressView
+        let pointInCollectionView = gestureRecognizer.location(in: collectionView)
+
+        let state = gestureRecognizer.state
+        var currentMovingCell: UICollectionViewCell!
+        
+        if state == .began{
+            print("begin")
+        }
+        else if state == .ended{
+            print("ended")
+        }
+        
+    }
 
     /// The basic longPressView position logic is moving with your finger's original position.
     /// - The Move type longPressView will keep the relative position during this longPress, that's how Apple Calendar did.
@@ -401,7 +420,8 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
 
         let state = gestureRecognizer.state
         var currentMovingCell: UICollectionViewCell!
-
+        
+        
         if isLongPressing == false {
             if let indexPath = collectionView.indexPathForItem(at: pointInCollectionView) {
                 // Can add some conditions for allowing only few types of cells can be moved
